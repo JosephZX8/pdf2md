@@ -1,0 +1,13 @@
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
+
+/* 自定义样式 */
+.prose {
+  max-width: none;
+}
+
+.prose img {
+  max-width: 100%;
+  height: auto;
+} 

@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>解析结果</title>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+</head>
+<body>
+    <h1>Markdown内容展示</h1>
+    <div id="output"></div>
+    <script>
+        async function loadMarkdown() {
+            try {
+                const response = await fetch('/get_md');
+                let mdText = await response.text();
+                // 修复图片路径处理
+                mdText = mdText.replace(/!\[(.*?)\]\((.*?)\)/g, (match, alt, src) => {
+                    // 如果图片路径已经是相对路径，直接返回
+                    if (src.startsWith('/output/')) {
+                        return match;
+                    }
+                    // 否则添加 /output/ 前缀
+                    return `![${alt}](/output/${src})`;
+                });
+                document.getElementById('output').innerHTML = marked.parse(mdText);
+            } catch (error) {
+                console.error('加载失败:', error);
+                document.getElementById('output').innerText = '加载失败';
+            }
+        }
+        loadMarkdown();
+    </script>
+</body>
+</html>
